@@ -29,7 +29,7 @@ for shift in range(4):
         img=np.cos(nu0*X+xi0*Y+shift)
         plt.imsave('fringe.jpg',img)
 
-    image = cv2.imread('/home/marcelbonnici/Dropbox/000_LINUX/turntable/fringe.jpg')
+    image = cv2.imread('fringe.jpg')
     cv2.namedWindow("fringe", cv2.WND_PROP_FULLSCREEN)
     cv2.moveWindow('fringe',int(m.width),0)
     cv2.setWindowProperty("fringe",cv2.WND_PROP_FULLSCREEN,cv2.WINDOW_FULLSCREEN)
