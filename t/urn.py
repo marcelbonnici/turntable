@@ -39,7 +39,7 @@ Input degrees truncated to the 3200th of a revolution
 """
 def degrees(deg):
     try:
-        go=int(float(deg)/.1125)
+        go=int(51.8518518519*float(deg))
         arduinoData.write((str(go)+'\n').encode())
     except ValueError:
         print('Non-integer characters not allowed')
