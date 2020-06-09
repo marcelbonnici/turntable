@@ -1,6 +1,7 @@
 """
-Obsolete; for phase shift
+For phase shifts; best of mathfringe & fringeproja
 """
+#NEEDS MANUAL EXPOSURE TO BE SET UP
 import numpy as np
 import matplotlib.pyplot as plt
 import cv2
@@ -25,6 +26,7 @@ y=np.linspace(0,1,height)
 X,Y=np.meshgrid(x,y)
 
 picname=0
+I=[]
 
 for shift in range(4):
     shift=shift*np.pi/2
@@ -33,10 +35,11 @@ for shift in range(4):
         plt.imsave('fringe.jpg',img, cmap=cmap)
         I.append(img)
 
-    #else:
-    #    img=np.cos(nu0*X+xi0*Y+shift)
-    #    plt.imsave('fringe.jpg',img)
-    #    I.append(img)
+    else:
+        img=np.cos(nu0*X+xi0*Y+shift)
+        plt.imsave('fringe.jpg',img, cmap=cmap)
+        I.append(img)
+
     image = cv2.imread('fringe.jpg')
     cv2.namedWindow("fringe", cv2.WND_PROP_FULLSCREEN)
     cv2.moveWindow('fringe',int(m.width),0)
@@ -44,18 +47,17 @@ for shift in range(4):
 
     cv2.imshow('fringe', image)
 
-    z=z+1
-    key=cv2.waitKey(200)
-    cap = cv2.VideoCapture(3) #TO DO: make process automatically find right webcam
-    #cap.set(cv2.CAP_PROP_AUTO_EXPOSURE, 0.25)
-    #cap.set(cv2.CAP_PROP_EXPOSURE, -8)
-    ret, frame = cap.read() #MOD
+    key=cv2.waitKey(2)
+
+    picname=picname+1
+    cap = cv2.VideoCapture(2) #TO DO: make process automatically find right webcam
+    ret, frame = cap.read()
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-    cv2.imwrite('calibby/'+str(picname)+'.png',gray)
+    cv2.imwrite('phaseimgs/'+str(picname)+'.jpg',gray)
     cap.release()
     key=cv2.waitKey(2)
 
     if key == 27:#if ESC is pressed, exit loop
+
         cv2.destroyAllWindows()
         break
-#phase=np.arctan((I[1]-I[3])/(I[0]-I[2])) # list of img's

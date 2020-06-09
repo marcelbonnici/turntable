@@ -1,7 +1,10 @@
+"""
+For calibration Plotting
+"""
 import numpy as np
 import matplotlib.pyplot as plt
 import cv2
-
+import csv
 """
 img=cv2.imread('calibby/1.png')
 print(img[230][0])
@@ -33,7 +36,7 @@ plt.ylabel('Frequency')
 plt.title('Histogram of Input Image')
 plt.show()
 """
-
+"""
 x=np.array([])
 y=np.array([])
 
@@ -51,11 +54,36 @@ plt.plot(x,y)
 axes = plt.gca()
 axes.set_xlim([0,255])
 axes.set_ylim([0,255])
-plt.xlabel('Average Intensity')
-plt.ylabel('Captured Intensity')
+plt.xlabel('Projected Intensity')
+plt.ylabel('Average Captured Intensity')
 plt.title('Histogram of Input Image')
 plt.show()
+"""
+"""
+x=np.array([])
+y=np.array([])
+myimg = cv2.imread('calib/255.png')
+print(myimg.shape[0])
+print(myimg.shape[1])
+a=np.random.randint(myimg.shape[0])
+b=np.random.randint(myimg.shape[1])
+for z in range(int(255/10)+2):
+    if z!=0:
+        z=(z*10)-5
+        myimg = cv2.imread('calib/'+str(z)+'.png')
+        x=np.append(x,z)
+        y=np.append(y,myimg[a][b][0])
 
+print(myimg[a][b][0])
+plt.plot(x,y)
+axes = plt.gca()
+axes.set_xlim([0,255])
+axes.set_ylim([0,255])
+plt.xlabel('Projected Intensity')
+plt.ylabel('Captured Intensity')
+plt.title('Histogram of Input Image @ Pixel ['+str(a)+' , '+str(b)+'] (10ms Exposure Time)')
+plt.show()
+"""
 """
 pic=cv2.imread('pitchblacktest1.png')
 #pic1=cv2.imread('pitchblacktest1.png')
@@ -71,3 +99,35 @@ cv2.imwrite('pitchblackblue.png',picdraw)
 cv2.waitKey(0) # waits until a key is pressed
 cv2.destroyAllWindows() # destroys the window showing image
 """
+x=np.array([])
+y=np.array([])
+myimg = cv2.imread('calibfull/255.png')
+
+for z in range(256):
+    if z!=0:
+        myimg = cv2.imread('calibfull/'+str(z)+'.png')
+        avg_color_per_row = np.average(myimg, axis=0)
+        avg_color = np.average(avg_color_per_row, axis=0)
+        x=np.append(x,z)
+        y=np.append(y,avg_color[0])
+        print(str(int(x[-1]))+','+str(int(y[-1])))
+
+rows = np.asarray(np.array([x,y]).T,dtype='int')
+# name of csv file
+filename = "plot.csv"
+# writing to csv file
+with open(filename, 'w') as csvfile:
+    # creating a csv writer object
+    csvwriter = csv.writer(csvfile)
+
+    # writing the data rows
+    csvwriter.writerows(rows)
+
+plt.plot(x,y)
+axes = plt.gca()
+axes.set_xlim([0,255])
+axes.set_ylim([0,255])
+plt.xlabel('Projected Intensity')
+plt.ylabel('Average Captured Intensity')
+plt.title('Radiometric Calibration Curve for Input Image')# @ Pixel ['+str(a)+' , '+str(b)+'] (10ms Exposure Time)')
+plt.show()
