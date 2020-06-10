@@ -47,13 +47,20 @@ for shift in range(4):
 
     cv2.imshow('fringe', image)
 
-    key=cv2.waitKey(2)
-
+    key=cv2.waitKey(1000)
     picname=picname+1
     cap = cv2.VideoCapture(2) #TO DO: make process automatically find right webcam
-    ret, frame = cap.read()
-    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-    cv2.imwrite('phaseimgs/'+str(picname)+'.jpg',gray)
+    cap.set(3,3264)
+    cap.set(4,2448)
+    cap.set(cv2.CAP_PROP_AUTO_EXPOSURE, 0.25)
+    cap.set(cv2.CAP_PROP_EXPOSURE, 220)
+    i=0
+    while(i<3):
+        ret, frame = cap.read() #MOD
+        if i==2:
+            gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+            cv2.imwrite('phaseimgs/'+str(picname)+'.png',gray)
+        i=i+1
     cap.release()
     key=cv2.waitKey(2)
 

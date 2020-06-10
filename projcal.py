@@ -7,13 +7,25 @@ import cv2
 import time
 import screeninfo
 import subprocess
-#time.sleep(10)
+
 screencount=0
+
 for m in screeninfo.get_monitors():
     width = int(m.width)
     height = int(m.height)
-
-for z in range(256):#int(255/10)+2):#255
+"""
+cmd = ['xrandr']
+cmd2 = ['grep', '*']
+p = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+p2 = subprocess.Popen(cmd2, stdin=p.stdout, stdout=subprocess.PIPE)
+p.stdout.close()
+resolution_string, junk = p2.communicate()
+resolution = resolution_string.split()[0]
+width, height = resolution.split('x')
+print(width)
+print(height)
+"""
+for z in range(254,256):#int(255/10)+2):#255
     #if z!=0:
         #z=(z*10)-5
     #y=z

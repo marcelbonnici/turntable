@@ -44,16 +44,16 @@ while(True):
     if speed<1:
         time_now=time.time()
         cap.set(cv2.CAP_PROP_AUTO_EXPOSURE, 0.25)
-        cap.set(cv2.CAP_PROP_EXPOSURE, 93)
+        cap.set(cv2.CAP_PROP_EXPOSURE, 300)
         ret, gray = cap.read()
-        image = cv2.putText(gray, '312us', (50,50), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,0,0), 2, cv2.LINE_AA)
+        #image = cv2.putText(gray, '312us', (50,50), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,0,0), 2, cv2.LINE_AA)
         speed=speed+(time.time()-time_now)
     elif speed>1 and speed<2:
         time_now=time.time()
         cap.set(cv2.CAP_PROP_AUTO_EXPOSURE, 0.25)
-        cap.set(cv2.CAP_PROP_EXPOSURE, 186)
+        cap.set(cv2.CAP_PROP_EXPOSURE, 220)
         ret, gray = cap.read()
-        image = cv2.putText(gray, '320ms', (50,50), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,0,0), 2, cv2.LINE_AA)
+        #image = cv2.putText(gray, '22ms', (50,50), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,0,0), 2, cv2.LINE_AA)
         speed=speed+(time.time()-time_now)
     else:
         speed=0

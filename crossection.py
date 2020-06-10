@@ -19,18 +19,19 @@ plt.title('Intensity of Cross-Section')
 plt.show()
 """
 """
-p51=cv2.imread('calib/51.png')
-p102=cv2.imread('calib/102.png')
-p153=cv2.imread('calib/153.png')
-p204=cv2.imread('calib/204.png')
-p255=cv2.imread('calib/255.png')
+p51=cv2.imread('pitchblacktest1.png')
+#p102=cv2.imread('calib/102.png')
+#p153=cv2.imread('calib/153.png')
+#p204=cv2.imread('calib/204.png')
+#p255=cv2.imread('calib/255.png')
 plt.hist(p51.ravel(), color='red', bins = 40)
-plt.hist(p102.ravel(), color='orange', bins = 40)
-plt.hist(p153.ravel(), color='green', bins = 40)
-plt.hist(p204.ravel(), color='blue', bins = 40)
-plt.hist(p255.ravel(), color='purple', bins = 40)
+#plt.hist(p102.ravel(), color='orange', bins = 40)
+#plt.hist(p153.ravel(), color='green', bins = 40)
+#plt.hist(p204.ravel(), color='blue', bins = 40)
+#plt.hist(p255.ravel(), color='purple', bins = 40)
 axes = plt.gca()
 axes.set_xlim([0,255])
+axes.set_ylim([0,50])
 plt.xlabel('Grayscale Value')
 plt.ylabel('Frequency')
 plt.title('Histogram of Input Image')
@@ -94,11 +95,12 @@ for i in range (pic.shape[0]):
             print(pic[i][j])
             picdraw = cv2.rectangle(picdraw, (j-2,i-2), (j+2,i+2), (255,0,0), 1)
 cv2.imshow('hi', picdraw)
-cv2.imwrite('pitchblackblue.png',picdraw)
+cv2.imwrite('pitchblackblue1.png',picdraw)
 
 cv2.waitKey(0) # waits until a key is pressed
 cv2.destroyAllWindows() # destroys the window showing image
 """
+
 x=np.array([])
 y=np.array([])
 myimg = cv2.imread('calibfull/255.png')
