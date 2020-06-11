@@ -10,10 +10,6 @@ import subprocess
 
 screencount=0
 
-for m in screeninfo.get_monitors():
-    width = int(m.width)
-    height = int(m.height)
-"""
 cmd = ['xrandr']
 cmd2 = ['grep', '*']
 p = subprocess.Popen(cmd, stdout=subprocess.PIPE)
@@ -21,11 +17,11 @@ p2 = subprocess.Popen(cmd2, stdin=p.stdout, stdout=subprocess.PIPE)
 p.stdout.close()
 resolution_string, junk = p2.communicate()
 resolution = resolution_string.split()[0]
-width, height = resolution.split('x')
-print(width)
-print(height)
-"""
-for z in range(254,256):#int(255/10)+2):#255
+width, height = str(resolution).split('x')
+width=int(width[2:])
+height=int(height[:-1])
+
+for z in range(146,256):#int(255/10)+2):#255
     #if z!=0:
         #z=(z*10)-5
     #y=z
@@ -36,7 +32,7 @@ for z in range(254,256):#int(255/10)+2):#255
     plt.imsave('calib.jpg',calibpic)
     image = cv2.imread('calib.jpg')
     cv2.namedWindow("fringe", cv2.WND_PROP_FULLSCREEN)
-    cv2.moveWindow('fringe',int(m.width),0)
+    cv2.moveWindow('fringe',width,0)
     cv2.setWindowProperty("fringe",cv2.WND_PROP_FULLSCREEN,cv2.WINDOW_FULLSCREEN)
 
     cv2.imshow('fringe', image)
@@ -48,7 +44,7 @@ for z in range(254,256):#int(255/10)+2):#255
     cap.set(3,3264)
     cap.set(4,2448)
     cap.set(cv2.CAP_PROP_AUTO_EXPOSURE, 0.25)
-    cap.set(cv2.CAP_PROP_EXPOSURE, 220)
+    cap.set(cv2.CAP_PROP_EXPOSURE, 200)
     i=0
     while(i<3):
         ret, frame = cap.read() #MOD

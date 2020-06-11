@@ -1,15 +1,32 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import cv2
+from PIL import Image
+from tifffile import imsave
 
-I0=cv2.imread('phaseimgs/1.png')#shift by 0
-I1=cv2.imread('phaseimgs/2.png')#shift by pi/2
-I2=cv2.imread('phaseimgs/3.png')#shift by pi
-I3=cv2.imread('phaseimgs/4.png')#shift by 3*pi/2
+I0=Image.open('phaseimgs/1.png')
+I1=Image.open('phaseimgs/2.png')
+I2=Image.open('phaseimgs/3.png')
+I3=Image.open('phaseimgs/4.png')
 
-#np.atan does not exist, I assumed np.arctan was the substitute
-phase = -1*np.arctan(I0-I2/I1-I3) #Multiplied by -1 to make values positive
+I0=np.asarray(I0, dtype='float32')
+I1=np.asarray(I1, dtype='float32')
+I2=np.asarray(I2, dtype='float32')
+I3=np.asarray(I3, dtype='float32')
 
-phase *= 40.584510488 #2*pi * 40.584... = 255
+"""
+I=np.array([I0,I1,I2,I3]).T
+print(I.shape)
+phase = np.arctan2(I[:,:,0] - I[:,:,2], I[:,:,1] - I[:,:,3])
+"""
 
-cv2.imwrite('retrieval.jpg',np.nan_to_num(phase))
+I=np.array([I0,I1,I2,I3])
+print(I.shape)
+phase = np.arctan2(I[0,:,:] - I[2,:,:], I[1,:,:] - I[3,:,:])
+
+imsave('retrieval.tiff', phase)
+
+plt.imshow(phase)
+
+cbar=plt.colorbar()
+
+plt.show()
