@@ -13,13 +13,13 @@ import csv
 from threading import Thread
 
 class VideoStreamWidget(object): #SOURCE: https://stackoverflow.com/questions/54933801/how-to-increase-performance-of-opencv-cv2-videocapture0-read
-    def __init__(self, src=4):
+    def __init__(self, src=2):
         self.cap = cv2.VideoCapture(src)
 
         self.cap.set(3,1280)#3264 CHANGED
         self.cap.set(4,720)#2448 CHANGED
         self.cap.set(cv2.CAP_PROP_AUTO_EXPOSURE, 0.25)
-        self.cap.set(cv2.CAP_PROP_EXPOSURE, 83) #800 CHANGED
+        self.cap.set(cv2.CAP_PROP_EXPOSURE, 40) #800 CHANGED
         self.directory='lcalibgradient/'
 
         # Start the thread to read frames from the video stream
@@ -75,7 +75,7 @@ class VideoStreamWidget(object): #SOURCE: https://stackoverflow.com/questions/54
         #print(str(count)+ ' of ' + str(total))
 
     def each_capture(self, width, height):
-        captures=255
+        captures=240
         for z in range(50,captures+1):
             #projected_loc=lookup(table, z)
             image=self.gradient_calibration(z)#image_generate(z) CHANGED
@@ -97,7 +97,7 @@ class VideoStreamWidget(object): #SOURCE: https://stackoverflow.com/questions/54
             #(ret,frame) = video_stream_widget.update()
             if i>1:
                 gray = cv2.cvtColor(self.frame, cv2.COLOR_BGR2GRAY)
-                cv2.imwrite(self.directory+str(z)+'-'+str(i-2)+'.png',gray[155:-155,280:-210])#Index CHANGED
+                cv2.imwrite(self.directory+str(z)+'-'+str(i-2)+'.png',gray[150:-150,:])#Index CHANGED
             i=i+1
 
         key = cv2.waitKey(1)

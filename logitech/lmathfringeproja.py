@@ -148,12 +148,12 @@ for shift in range(n_steps):
 
     key=cv2.waitKey(1000)
     picname=picname+1
-    cap = cv2.VideoCapture(4) #TO DO: make process automatically find right webcam
+    cap = cv2.VideoCapture(2) #TO DO: make process automatically find right webcam
     #2 or /dev/v4l/by-id/usb-Sonix_Technology_Co.__Ltd._USB_2.0_Camera_SN0179-video-index0
     cap.set(3,1280)
     cap.set(4,720)
     cap.set(cv2.CAP_PROP_AUTO_EXPOSURE, 0.25)
-    cap.set(cv2.CAP_PROP_EXPOSURE, 83) #800
+    cap.set(cv2.CAP_PROP_EXPOSURE, 40) #800
     i=0
     while(i<3):
         ret, frame = cap.read() #MOD

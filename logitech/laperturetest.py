@@ -8,18 +8,21 @@ import subprocess
 #Enable manual exposure in terminal:   v4l2-ctl -d /dev/video2 --set-ctrl=exposure_auto=1
 
 #LINUX
+
+
 for cam_number in range(10):
     camera='/dev/video'+str(cam_number)
     subprocess.call(['v4l2-ctl','-d',camera,'--set-ctrl=exposure_auto=1'])
 
-cap = cv2.VideoCapture(4)
+cap = cv2.VideoCapture(2)
+
 #2 or /dev/v4l/by-id/usb-Sonix_Technology_Co.__Ltd._USB_2.0_Camera_SN0179-video-index0
-w=1280
-h=720
+w=960
+h=640
 cap.set(3,w)
 cap.set(4,h)
 speed=0
-exposure=83
+exposure=1
 while(True):
     # Capture frame-by-frame
     if speed<1:
@@ -41,15 +44,15 @@ while(True):
     # Our operations on the frame come here
     #gray = cv2.cvtColor(gray, cv2.COLOR_BGR2GRAY)
 
-    gray = cv2.rectangle(gray, (int(w/2)-10,int(h/2)-10), (int(w/2)+10,int(h/2)+10), (255,0,0), 2)
+    gray = cv2.rectangle(gray, (int(w/2)-10,int(h/2)-10), (int(w/2)+10,int(h/2)+10), (0,0,255), 2)
     # Display the resulting frame
-    gray=gray[155:-155,280:-210]
+    #gray=gray[150:-150, :]
     cv2.imshow('frame',gray)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         #cv2.imwrite('avgintensity.jpg',gray)
         avg_color_per_row = np.average(gray, axis=0)
         avg_color = np.average(avg_color_per_row, axis=0)
-        print(avg_color[0])
+        print(avg_color)
         #print(np.average(gray[240]))
         cv2.imwrite('sample.png', gray)
         break

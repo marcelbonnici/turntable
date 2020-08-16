@@ -77,7 +77,7 @@ def basic_calibrate():
 
 def gradient_calibrate():
     """
-    Compares a projected image to the capture of the projection on a whtie wall, making a lookup csv with the best results
+    Compares a projected gradient image to the capture of the projection on a white wall, making a lookup csv with the best results
     """
     plt.rcParams.update({'font.size': 22})
     basis=cv2.imread('lbasis.png')[540,int(1920/2):]
@@ -136,6 +136,75 @@ def gradient_calibrate():
     plt.title('Radiometric Calibration Curve for Input Image', fontsize=18)# @ Pixel ['+str(a)+' , '+str(b)+'] (10ms Exposure Time)')
     plt.show()
 
+def gradient_calibrate_new():
+    """
+    Compares a projected gradient image to the capture of the projection on a white wall, making a lookup csv with the best results
+    """
+    plt.rcParams.update({'font.size': 22})
+    basis=cv2.imread('lbasis.png')[540,int(1920/2):]
+
+    sample=np.array([])
+    for i in range(50, 256):
+        intensity_avg=np.array([])
+        for j in range(1, 5):
+            pic=cv2.imread('lcalibgradient/'+str(i)+'-'+str(j)+'.png')
+            pic=np.mean(pic[:,int(pic.shape[1]/2)])
+            intensity_avg=np.append(intensity_avg, pic)
+        intensity_avg=np.mean(intensity_avg)
+        sample=np.append(sample,intensity_avg)
+    #sample=np.mean(sample, axis=0)
+    #print(sample)
+    #sample=sample[int(sample.shape[0]/2):]
+    cherries=np.array([])
+    slength=int(sample.shape[0])
+    blength=int(basis.shape[0])
+    """
+    for n in range(blength):
+        proj=basis[n,0]
+        capt=sample[int(slength/blength*n)] # 1.7 CHANGED
+
+        if n==0:
+            old=proj
+            sum=0
+            tally=0
+        if proj!=old:
+            cherries=np.append(cherries, [old, int(sum/tally)])#print(str(old)+","+str(int(sum/tally)))
+            sum=0
+            tally=0
+        if n==int(np.around(blength)-1):
+            cherries=np.append(cherries, [old, int(sum/tally)])#print(str(proj)+","+str(int(sum/tally)))
+
+        sum=sum+capt
+        tally=tally+1
+        old=proj
+
+    cherries=cherries.reshape(int(len(cherries)/2),2)
+    cherriesT=cherries.T
+    """
+    #x=cherriesT[0]
+    #y=cherriesT[1]
+    x=np.arange(50,241)
+    y=sample[:-15]
+    z=np.polyfit(x,y,11)
+    p=np.poly1d(z)
+    xp=np.linspace(x,y, num=191)
+    p=p(xp)
+    yp=p
+    rows = np.asarray(np.array([xp,yp]).T,dtype='int')[:,0]
+    rows=rows[int(np.where(rows[:,0]==50)[0][0]):]
+    np.savetxt("lcherrypick.csv", rows, delimiter=",", fmt='%d')
+    fig, ax = plt.subplots()
+    ax.plot(x, y, '-b', label='Before Line Fitting')
+    ax.plot(xp, yp, '-r', label='After Line Fitting')
+    leg = ax.legend()
+
+    ax.set_xlim([50,241])
+    ax.set_ylim([0,260])
+    plt.xlabel('Projected Intensity', fontsize=18)
+    plt.ylabel('Captured Intensity', fontsize=18)
+    plt.title('Radiometric Calibration Curve for Input Image', fontsize=18)# @ Pixel ['+str(a)+' , '+str(b)+'] (10ms Exposure Time)')
+    plt.show()
+
 def three_cross_section():
     """
     Compares the ideal sinusoid to the calibrated sinusoid to the captured, gradient sinusoid
@@ -167,11 +236,13 @@ def three_cross_section():
     plt.show()
 
 if __name__ == "__main__":
-    
-    #basic_calibrate()
 
-    #polyfit_calibrate()
+    #basic_calibrate()
 
     #gradient_calibrate()
 
-    three_cross_section()
+    #polyfit_calibrate()
+
+    #three_cross_section()
+
+    gradient_calibrate_new()

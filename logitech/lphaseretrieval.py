@@ -3,7 +3,6 @@ import matplotlib.pyplot as plt
 from PIL import Image
 from tifffile import imsave
 import os, os.path
-import cv2
 
 def phaseshift(directory):
     Iarr=np.array([])
@@ -27,18 +26,14 @@ def phaseshift(directory):
     return phase
 
 def unwrap(low, high):
-    un=high+(2*np.pi)*np.around((60*low-high)/(2*np.pi)) # 60 cuz 30/.5
+    un=high+(2*np.pi)*np.around((60*low-high)/(2*np.pi)) # 60 since 30/.5
     return un
 
 def depthmap(u):
-    u=(u-np.min(u))/(np.max(u)-np.min(u)) #2448 CHANGED
-
-    #u=masked_phase_no_noise(u)
-
-    xyz(u)
+    u=(u-np.min(u))/(np.max(u)-np.min(u))
     return u
 
-def graph(math):
+def graph(math, title):
     plt.rcParams.update({'font.size': 22})
     plt.imshow(math, cmap='gray', interpolation='none')
     cbar=plt.colorbar()
@@ -47,7 +42,7 @@ def graph(math):
     #md=(mx-mn)/2
     #cbar.set_ticks([-.05,0,.05])
     #cbar.set_ticklabels([-.05,0,.05])
-    plt.title("Unwrapped Phase Map")
+    plt.title(title)
     plt.show()
 
 def intensity_modulation(directory):
@@ -117,26 +112,59 @@ def masked_phase_f(unwrapped, unwrapped_0):
     z=np.where(z==9999, np.min(z), z)
     return z
 
-def xyz(u):
+def xyz(u, title):
     m,n=u.shape
     R,C=np.mgrid[:m,:n]
     expression=np.column_stack((C.ravel(),R.ravel(), u.ravel()))
-    np.savetxt("output.xyz", expression[:,:], delimiter=" ")
+    np.savetxt(title, expression[:,:], delimiter=" ")
+
+def xyz_combine():
+    a=np.loadtxt('plainwall.xyz')
+    #a[:,2]=70*a[:,2]
+    b=np.loadtxt('plainwall_p30.xyz')
+    #b[:,2]=70*b[:,2]
+    c=np.loadtxt('plainwall_n30.xyz')
+    #c[:,2]=70*c[:,2]
+    combined=np.concatenate((a, b, c), axis=0)
+    np.savetxt('intersection.xyz', combined, delimiter=" ")
+    np.savetxt('plainwall0.xyz', a, delimiter=" ")
+    np.savetxt('plainwallp70.xyz', b, delimiter=" ")
+    np.savetxt('plainwalln70.xyz', c, delimiter=" ")
 
 if __name__ == "__main__":
 
-    low=phaseshift('steppics/s0')
-    high=phaseshift('steppics/l0')
-    unwrapped_0=unwrap(low,high)
+    #low=phaseshift('steppics/s0')
+    #high=phaseshift('steppics/l0')
+    #unwrapped_0=unwrap(low,high)
 
-    low=phaseshift('steppics/sloop')
-    high=phaseshift('steppics/lloop')
+    #z=((440/87.84)*(unwrapped-unwrapped_0))#[155:-155,280:-210]
+
+    low=phaseshift('steppics/scenter')
+    high=phaseshift('steppics/lcenter')
     unwrapped=unwrap(low,high)
 
-    z=((504/64)*(unwrapped-unwrapped_0))[155:-155,280:-210]
+    #u=depthmap(unwrapped)
+    u=(440/87.84)*(unwrapped-unwrapped)
+    #xyz(u[200:-140, 300:-200], "plainwall.xyz")
+    graph(u[200:-140, 300:-200], "Depth Map @ 0°")
+    """
+    low=phaseshift('steppics/scenter_p30')
+    high=phaseshift('steppics/lcenter_p30')
+    unwrappedp=unwrap(low,high)
+    #u=depthmap(unwrappedp)
+    u=(440/87.84)*(unwrappedp-unwrapped)
+    #xyz(u[200:-140, 300:-200], "plainwall_p30.xyz")
 
-    u=depthmap(z)
+    low=phaseshift('steppics/scenter_n30')
+    high=phaseshift('steppics/lcenter_n30')
+    unwrappedn=unwrap(low,high)
+    #u=depthmap(unwrappedn)
+    u=(440/87.84)*(unwrappedn-unwrapped)
 
+    xyz(u[200:-140, 300:-200], "plainwall_n30.xyz")
+
+    xyz_combine()
+    """
     #average_intensity('lampcalibgradient') # Part B, Graphing Included
     # unwrapped() is Part C, Graphing Excluded
     #intensity_modulation('steppics/llamp') #Part D, Graphing Included
