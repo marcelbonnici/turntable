@@ -154,14 +154,27 @@ for shift in range(n_steps):
     cap.set(4,720)
     cap.set(cv2.CAP_PROP_AUTO_EXPOSURE, 0.25)
     cap.set(cv2.CAP_PROP_EXPOSURE, 40) #800
+    time.sleep(1)
+    """
     i=0
     while(i<3):
         ret, frame = cap.read() #MOD
         if i==2:
             gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-            cv2.imwrite('steppics/'+str(picname)+'.png',gray)
-            #cv2.imwrite('wah.png',gray)
+            cv2.imwrite('nerf_low/'+str(picname)+'.png',gray)
+
         i=i+1
+    """
+
+    i=0
+    while(i<=6):#(i<=51):
+        ret, frame = cap.read() #MOD
+        #(ret,frame) = video_stream_widget.update()
+        if i>1:
+            gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+            cv2.imwrite('sinusoid_avg/'+str(picname)+'-'+str(i-2)+'.png',gray)#Index CHANGED
+        i=i+1
+
     cap.release()
     key=cv2.waitKey(2)
 

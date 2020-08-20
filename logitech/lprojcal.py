@@ -49,7 +49,7 @@ class VideoStreamWidget(object): #SOURCE: https://stackoverflow.com/questions/54
         return width,height
 
     def gradient_calibration(self, z):
-        image=cv2.imread('lbasis50240.png')#('fringepc.png')
+        image=cv2.imread('fringepc.png') #('lbasis50240.png')
         fail=0
         word='bad'
         middle_index='(array([], dtype=int64), array([], dtype=int64))'
@@ -75,10 +75,10 @@ class VideoStreamWidget(object): #SOURCE: https://stackoverflow.com/questions/54
         #print(str(count)+ ' of ' + str(total))
 
     def each_capture(self, width, height):
-        captures=240
-        for z in range(50,captures+1):
+        captures=255
+        for z in range(0,captures+1):
             #projected_loc=lookup(table, z)
-            image=self.gradient_calibration(z)#image_generate(z) CHANGED
+            image=self.gradient_calibration(z) # self.image_generate(z) CHANGED
             self.project(z, captures, image)
             self.photograph(z, self.cap)
             key=cv2.waitKey(2)
