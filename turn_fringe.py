@@ -411,7 +411,7 @@ def data_files(nu00, nu1, camera_to_projector_distance, to_wall_distance, divisi
 if __name__ == "__main__":
     table=open_csv("projection_lookup_table.csv")
 
-    folder='delete_this'#'turn_fringe'
+    folder='turn_fringe'
 
     portno=0
     exposur=40
