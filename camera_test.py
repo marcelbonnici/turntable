@@ -99,7 +99,7 @@ if __name__ == "__main__":
 
     # Set these two compare exposures, aiming for one below your webcam's noise ceiling. Can be ignored if you are content with your exposure.
     exposure1=1
-    exposure2=50
+    exposure2=2
 
     enable_manual_exposure()
     cap = set_camera_params(port_number, webcam_width, webcam_height)

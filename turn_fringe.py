@@ -253,9 +253,9 @@ def procedure(folder, table, width, height, portno, exposur, cam_width, cam_heig
                 loca=0
                 picname=0
 
-                if divisions > 1:
-                    turn.degrees(360/divisions)
-                    time.sleep(36/int(np.abs(divisions)))
+                #if divisions > 1:
+                turn.degrees(360/divisions)
+                time.sleep(36/int(np.abs(divisions)))
 
                 if j==divisions:
                     j=0
@@ -400,6 +400,7 @@ def data_files(nu00, nu1, camera_to_projector_distance, to_wall_distance, divisi
         graph(high_s_map, str(nu1)+' Frequency @ Subject', folder+'/subject/'+str(deg_folder)+'/plots_meshes/high_phase_map.png')
         graph(unwrapped, 'Unwrapped @ Wall', folder+'/subject/'+str(deg_folder)+'/plots_meshes/unwrapped_map.png')
         graph(depth, 'Depth Map', folder+'/subject/'+str(deg_folder)+'/plots_meshes/depth_map.png')
+        graph(low_s_map-low_map, 'Disparity of Low Frequency', folder+'/subject/'+str(deg_folder)+'/plots_meshes/low_disparity_map.png')
         depth=depth[z[0]:z[1],z[2]:z[3]]
 
         surface_plot(depth, 'Surface Plot of Subject', folder+'/subject/'+str(deg_folder)+'/plots_meshes/surface_plot.png')
@@ -407,11 +408,12 @@ def data_files(nu00, nu1, camera_to_projector_distance, to_wall_distance, divisi
         intensity_cross_sctn(depth, int(depth.shape[0]/2), z[3]-z[2], 'Cross Section 1/2-Way Down', folder+'/subject/'+str(deg_folder)+'/plots_meshes/cross_section_half_down.png')
         intensity_cross_sctn(depth, int(3*depth.shape[0]/5), z[3]-z[2], 'Cross Section 3/5-Way Down', folder+'/subject/'+str(deg_folder)+'/plots_meshes/cross_section_three_fifth_down.png')
         xyz(-1*depth,folder+'/subject/'+str(deg_folder)+'/point_cloud.xyz')
+        xyz((low_s_map-low_map)[z[0]:z[1],z[2]:z[3]],folder+'/subject/'+str(deg_folder)+'/low_point_cloud.xyz')
 
 if __name__ == "__main__":
     table=open_csv("projection_lookup_table.csv")
 
-    folder='wall_half_30'
+    folder='fringe_subject'
 
     portno=0
     exposur=40
@@ -419,11 +421,11 @@ if __name__ == "__main__":
     cam_height=720
 
     # These 2 need to be in the same units. They're only used to form a ratio between the two
-    camera_to_projector_distance=408
+    camera_to_projector_distance=112
     to_wall_distance=552
 
     width, height = screen_res()
     nu00, nu1, divisions = procedure(folder, table, width, height, portno, exposur, cam_width, cam_height)
 
     data_files(nu00, nu1, camera_to_projector_distance, to_wall_distance, divisions, folder)
-    #data_files(.25, 5, camera_to_projector_distance, to_wall_distance, 3, folder)
+    #data_files(.5,30, camera_to_projector_distance, to_wall_distance, 1, folder)
