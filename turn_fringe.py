@@ -253,9 +253,9 @@ def procedure(folder, table, width, height, portno, exposur, cam_width, cam_heig
                 loca=0
                 picname=0
 
-                if divisions > 1:
-                    turn.degrees(360/divisions)
-                    time.sleep(36/int(np.abs(divisions)))
+                #if divisions > 1:
+                turn.degrees(360/divisions)
+                time.sleep(36/int(np.abs(divisions)))
 
                 if j==divisions:
                     j=0
