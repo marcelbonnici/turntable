@@ -253,9 +253,9 @@ def procedure(folder, table, width, height, portno, exposur, cam_width, cam_heig
                 loca=0
                 picname=0
 
-                #if divisions > 1:
-                turn.degrees(360/divisions)
-                time.sleep(36/int(np.abs(divisions)))
+                if divisions > 1:
+                    turn.degrees(360/divisions)
+                    time.sleep(36/int(np.abs(divisions)))
 
                 if j==divisions:
                     j=0
@@ -411,7 +411,7 @@ def data_files(nu00, nu1, camera_to_projector_distance, to_wall_distance, divisi
 if __name__ == "__main__":
     table=open_csv("projection_lookup_table.csv")
 
-    folder='turn_fringe'
+    folder='wall_half_30'
 
     portno=0
     exposur=40

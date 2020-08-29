@@ -12,6 +12,8 @@ import subprocess
 import csv
 from threading import Thread
 from PIL import Image
+import os, os.path
+import shutil
 
 class VideoStreamWidget(object): #SOURCE: https://stackoverflow.com/questions/54933801/how-to-increase-performance-of-opencv-cv2-videocapture0-read
     def __init__(self, src=0):
@@ -47,10 +49,11 @@ class VideoStreamWidget(object): #SOURCE: https://stackoverflow.com/questions/54
         width, height = str(resolution).split('x')
         width=int(width[2:])
         height=int(height[:-1])
-        return width,height
+
+        return width,height,self.directory
 
     def gradient_calibration(self, z):
-        width, height=self.width_height()
+        width, height, _=self.width_height()
 
         img = Image.open('resize_image.png')
         hpercent = (height / float(img.size[1]))
@@ -103,7 +106,7 @@ class VideoStreamWidget(object): #SOURCE: https://stackoverflow.com/questions/54
             self.status, self.frame = cap.read()
             if i>1:
                 gray = cv2.cvtColor(self.frame, cv2.COLOR_BGR2GRAY)
-                cv2.imwrite(self.directory+str(z)+'-'+str(i-2)+'.png',gray[150:-150,:])#Index CHANGED
+                cv2.imwrite(self.directory+str(z)+'-'+str(i-2)+'.png',gray[200:-200,:])#Index CHANGED
             i=i+1
 
         key = cv2.waitKey(1)
@@ -129,7 +132,7 @@ class VideoStreamWidget(object): #SOURCE: https://stackoverflow.com/questions/54
         Compares a projected gradient image to the capture of the projection on a white wall, making a lookup csv with the best results
         """
 
-        width, height = self.width_height()
+        width, height, _ = self.width_height()
 
         plt.rcParams.update({'font.size': 22})
         basis=cv2.imread('basis.png')[int(height/2),int(width/2):]
@@ -163,6 +166,11 @@ class VideoStreamWidget(object): #SOURCE: https://stackoverflow.com/questions/54
 if __name__ == "__main__":
     #SEE __INIT__ FOR VALUES, LIKE WIDTH, HEIGHT AND EXPOSURE, TO CHANGE TO YOUR LIKING
     video_stream_widget = VideoStreamWidget()
-    width, height = video_stream_widget.width_height() # Find width and height of monitor for projection
+    width, height, directory = video_stream_widget.width_height() # Find width and height of monitor for projection
+
+    if os.path.exists(directory):
+        shutil.rmtree(directory)
+    os.makedirs(directory)
+
     video_stream_widget.each_capture(width, height) # Photographs and projects. The meat of this script
     video_stream_widget.generate_polyfit_calibration_curve() # Look to validate the data looks like it follows a smooth curve

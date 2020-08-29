@@ -1,7 +1,7 @@
 // inChar Resource: https://www.arduino.cc/en/Tutorial.StringToIntExample
 // Stepper Motor Resource: https://github.com/ItKindaWorks/How-To-Wire-It/blob/master/stepper/stepper_demo/stepper_demo.ino
-const int stepPin = 22;
-const int dirPin = 2;
+const int stepPin = 2;
+const int dirPin = 3;
 int steps;
 String inString = "";
 
