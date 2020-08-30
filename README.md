@@ -8,7 +8,7 @@ As a mechatronics enthusiast, computer vision is a necessary skill to hone. When
 
 ## Video Demonstration
 ---
-[![Turntable Fringe Projection](README-images/low_phase_map.png)](https://youtu.be/qwdusc)
+[![Turntable Fringe Projection](README-images/low_phase_map.png)](https://youtu.be/pxwZWfczoWY)
 
 ## Hardware
 ---
