@@ -102,11 +102,13 @@ def screen_res():
 
 def user_input():
     n_steps=int(input('Number of Steps: '))
-    divisions = int(input('Number of fractions of Rotations: '))
+    divisions = int(input('Number of Fractions of Rotations: '))
     nu00=input('Enter a LOW number of periods along x-axis: ')
     try:
         nu00=float(nu00)
     except ValueError:
+        nu00=0.25
+    if nu00 > 1:
         nu00=0.25
     xi00=0 # Was not reached but something like: float(input('Enter a LOW number of periods along y-axis: '))
     if nu00>0:
@@ -119,6 +121,8 @@ def user_input():
         nu1=float(nu1)
     except ValueError:
         nu1=0.25
+    if nu1<=1:
+        nu1=5
     xi1=0 # Was not reached but something like: float(input('Enter a HIGH number of periods along y-axis: '))
     if nu1>0:
         nu1=2*np.pi/(1/nu1)
@@ -398,7 +402,7 @@ def data_files(nu00, nu1, camera_to_projector_distance, to_wall_distance, divisi
 
         graph(low_s_map, 'LOW Frequency @ Subject', folder+'/subject/'+str(deg_folder)+'/plots_meshes/low_phase_map.png')
         graph(high_s_map, 'HIGH Frequency @ Subject', folder+'/subject/'+str(deg_folder)+'/plots_meshes/high_phase_map.png')
-        graph(unwrapped, 'Unwrapped @ Wall', folder+'/subject/'+str(deg_folder)+'/plots_meshes/unwrapped_map.png')
+        graph(unwrapped, 'Unwrapped @ Subject', folder+'/subject/'+str(deg_folder)+'/plots_meshes/unwrapped_map.png')
         graph(depth, 'Depth Map', folder+'/subject/'+str(deg_folder)+'/plots_meshes/depth_map.png')
         graph(low_s_map-low_map, 'Disparity of Low Frequency', folder+'/subject/'+str(deg_folder)+'/plots_meshes/low_disparity_map.png')
         depth=depth[z[0]:z[1],z[2]:z[3]]

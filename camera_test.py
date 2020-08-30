@@ -14,9 +14,10 @@ from matplotlib.ticker import LinearLocator, FormatStrFormatter
 from mpl_toolkits.mplot3d import Axes3D
 
 #LINUX
-def enable_manual_exposure():
+def enable_manual_exposure(port_number):
+    ''
     for cam_number in range(10):
-        camera='/dev/video'+str(cam_number)
+        camera='/dev/video'+str(port_number)
         subprocess.call(['v4l2-ctl','-d',camera,'--set-ctrl=exposure_auto=1'])
 
 def set_camera_params(port_number, width, height):
@@ -55,7 +56,7 @@ def project_white_screen(width, height):
     manager.window.wm_geometry("+500+0")
     plt.show(block=False)
 
-def exposure_compare(cap, w, h, a, b):
+def exposure_compare(cap, w, h, a, b, c, d, e, f):
     speed=0
     while(True):
         if speed<1:
@@ -80,7 +81,7 @@ def exposure_compare(cap, w, h, a, b):
 
         cv2.imshow('frame',gray)
         if cv2.waitKey(1) & 0xFF == ord('q'):
-            avg_color_per_row = np.average(gray, axis=0)
+            avg_color_per_row = np.average(gray[c:d,e:f], axis=0)
             avg_color = np.average(avg_color_per_row, axis=0)
             print('Average pixel intensity (out of 255): '+str(avg_color[1]))
             break
@@ -95,14 +96,21 @@ if __name__ == "__main__":
     webcam_height=640
 
     #Put webcam port number here
-    port_number=0
+    port_number=3
 
     # Set these two compare exposures, aiming for one below your webcam's noise ceiling. Can be ignored if you are content with your exposure.
-    exposure1=1
-    exposure2=2
+    exposure1=50
+    exposure2=75
 
-    enable_manual_exposure()
+    #Set the cropped area for pixel intensity sample
+    top_height_px=100
+    bottom_height_px=200
+    left_width_px=300
+    right_width_px=400
+
+
+    enable_manual_exposure(port_number)
     cap = set_camera_params(port_number, webcam_width, webcam_height)
     width,height = projector_res()
     project_white_screen(width, height) #also projects dot at middle to help you align camera
-    exposure_compare(cap, webcam_width, webcam_height, exposure1, exposure2)
+    exposure_compare(cap, webcam_width, webcam_height, exposure1, exposure2, top_height_px, bottom_height_px, left_width_px, right_width_px)
