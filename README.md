@@ -114,6 +114,8 @@ Run `$ python3 turn_fringe.py`. Input fields appear; below is clarification on h
 The procedure will begin by rotating the turntable, then projecting and capturing fringe projections on the subject, and repeat until every pattern at every angle is photographed. The files are then converted into phase maps and disparity maps; the latter are portrayed as point clouds, surface plots, cross-section plots, and plots correlating grayscale color to depth.
 ![flowchart of sequence of which order images are produced in](README-images/plot-process.png)
 
+If one desires to modify their plots, or make plots from photos they already have without triggering the turntable, camera or projector, they can use the `data_files` function independently. The captured fringe images' folder is the only link between both parts of the script.
+
 ## Future Possibilities
 ---
 A factor limiting the quality of the point clouds was finding good frequencies for an optimal depth map. A disparity map comparing two parallel walls, separated by 138mm, and projected with the same frequencies yielded nearly perfect flat walls, besides a few sample points only visible by squinting at the below figures.  While this looks promising, a disparity map comparing low and high frequency images gave results leaving something to be desired.
