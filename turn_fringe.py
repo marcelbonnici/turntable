@@ -387,8 +387,8 @@ def data_files(nu00, nu1, camera_to_projector_distance, to_wall_distance, divisi
         high_map=phaseshift(folder+'/wall/'+str(deg_folder)+'/high_pics')
         unwrapped_0=unwrap(low_map, high_map, nu00, nu1)
 
-        graph(low_map, str(nu00)+' Frequency @ Wall', folder+'/wall/'+str(deg_folder)+'/plots_meshes/low_phase_map.png')
-        graph(high_map, str(nu1)+' Frequency @ Wall', folder+'/wall/'+str(deg_folder)+'/plots_meshes/high_phase_map.png')
+        graph(low_map, 'LOW Frequency @ Wall', folder+'/wall/'+str(deg_folder)+'/plots_meshes/low_phase_map.png')
+        graph(high_map, 'HIGH Frequency @ Wall', folder+'/wall/'+str(deg_folder)+'/plots_meshes/high_phase_map.png')
         graph(unwrapped_0, 'Unwrapped @ Wall', folder+'/wall/'+str(deg_folder)+'/plots_meshes/unwrapped_map.png')
 
         low_s_map=phaseshift(folder+'/subject/'+str(deg_folder)+'/low_pics')
@@ -396,8 +396,8 @@ def data_files(nu00, nu1, camera_to_projector_distance, to_wall_distance, divisi
         unwrapped=unwrap(low_s_map, high_s_map, nu00, nu1)
         depth=(int(to_wall_distance)/int(camera_to_projector_distance))*(unwrapped-unwrapped_0)
 
-        graph(low_s_map, str(nu00)+' Frequency @ Subject', folder+'/subject/'+str(deg_folder)+'/plots_meshes/low_phase_map.png')
-        graph(high_s_map, str(nu1)+' Frequency @ Subject', folder+'/subject/'+str(deg_folder)+'/plots_meshes/high_phase_map.png')
+        graph(low_s_map, 'LOW Frequency @ Subject', folder+'/subject/'+str(deg_folder)+'/plots_meshes/low_phase_map.png')
+        graph(high_s_map, 'HIGH Frequency @ Subject', folder+'/subject/'+str(deg_folder)+'/plots_meshes/high_phase_map.png')
         graph(unwrapped, 'Unwrapped @ Wall', folder+'/subject/'+str(deg_folder)+'/plots_meshes/unwrapped_map.png')
         graph(depth, 'Depth Map', folder+'/subject/'+str(deg_folder)+'/plots_meshes/depth_map.png')
         graph(low_s_map-low_map, 'Disparity of Low Frequency', folder+'/subject/'+str(deg_folder)+'/plots_meshes/low_disparity_map.png')
