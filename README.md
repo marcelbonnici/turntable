@@ -3,15 +3,14 @@
 This open source project combines mechatronics and computer vision to find the depth of objects at every angle. The hardware is accomplished with an Arduino microcontroller powering a sturdy LEGO® turntable, which is controlled by a made-from-scratch python module rotating an object to observe all its geometry.
 
 ## Motivation
----
 As a mechatronics enthusiast, computer vision is a necessary skill to hone. When advised to make this project open source, it was logical to build the turntable from cherished LEGO® bricks to make it affordable, too.
 
 ## Video Demonstration
 ---
 [![Turntable Fringe Projection](README-images/low_phase_map.png)](https://youtu.be/pxwZWfczoWY)
 
-## Hardware
 ---
+## Hardware
 * [Arduino UNO](https://store.arduino.cc/usa/arduino-uno-rev3)
 * [Stepper Motor Driver Module](https://amzn.to/37S7ufj)
 * [NEMA17 Stepper Motor](https://amzn.to/2M3aJK2)
@@ -117,9 +116,15 @@ The procedure will begin by rotating the turntable, then projecting and capturin
 If one desires to modify their plots, or make plots from photos they already have without triggering the turntable, camera or projector, they can use the `data_files` function independently. The captured fringe images' folder is the only link between both parts of the script.
 
 ## Future Possibilities
----
 A factor limiting the quality of the point clouds was finding good frequencies for an optimal depth map. A disparity map comparing two parallel walls, separated by 138mm, and projected with the same frequencies yielded nearly perfect flat walls, besides a few sample points only visible by squinting at the below figures.  While this looks promising, a disparity map comparing low and high frequency images gave results leaving something to be desired.
 
 ![Fringe Frequencies](README-images/low_frequencies.png)
 
 Depending on one's standard of accuracy and object of interest, the point clouds from different positions are ready to be transformed into one cloud detailed from every side. Pixel-by-pixel calibration could also be explored; a function for it is in the fringe projection file but was not executed per suspiciously subpar results.
+
+## References
+Geng, Jason. “Structured-Light 3D Surface Imaging: a Tutorial.” *Advances in Optics and Photonics*, vol. 3, no. 2, 2011, p. 128., doi:10.1364/aop.3.000128.
+
+Rangarajan, Prasanna, et al. “Pushing the Limits of Digital Imaging Using Structured Illumination.” *2011 International Conference on Computer Vision*, Nov. 2011, doi:10.1109/iccv.2011.6126384.
+
+Zuo, Chao, et al. “Phase Shifting Algorithms for Fringe Projection Profilometry: A Review.” *Optics and Lasers in Engineering*, Elsevier, 15 May 2018, www.osti.gov/biblio/1469785.
