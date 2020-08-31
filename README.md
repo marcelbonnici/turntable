@@ -123,7 +123,9 @@ A factor limiting the quality of the point clouds was finding good frequencies f
 
 ![Fringe Frequencies](README-images/low_frequencies.png)
 
-Depending on one's standard of accuracy and object of interest, the point clouds from different positions are ready to be transformed into one cloud detailed from every side. Pixel-by-pixel calibration could also be explored; a function for it is in the fringe projection file but was not executed per suspiciously subpar results.
+The next goal would be fusing images from different views.
+
+Thus, under lenient standards of accuracy, the point clouds from different positions are ready to be transformed into one cloud detailed from every side. Pixel-by-pixel calibration could also be explored; a function for it is in the fringe projection file but was not executed per suspiciously subpar results.
 
 ## References
 Geng, Jason. “Structured-Light 3D Surface Imaging: a Tutorial.” *Advances in Optics and Photonics*, vol. 3, no. 2, 2011, p. 128., doi:10.1364/aop.3.000128.
