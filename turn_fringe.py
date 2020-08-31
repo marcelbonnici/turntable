@@ -319,8 +319,8 @@ def unwrap(low, high, low_freq, high_freq):
     un=high+(2*np.pi)*np.around(((high_freq/low_freq)*low-high)/(2*np.pi))
     return un
 
-def depthmap(u):
-    u=(u-np.min(u))/(np.max(u)-np.min(u))
+def depthmap(to_wall_distance, camera_to_projector_distance, unwrapped, unwrapped_0):
+    u=(int(to_wall_distance)/int(camera_to_projector_distance))*(unwrapped-unwrapped_0)
     return u
 
 def graph(math, title, filepath):

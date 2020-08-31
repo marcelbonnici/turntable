@@ -128,8 +128,8 @@ A factor limiting the quality of the point clouds was finding good frequencies f
 Pixel-by-pixel calibration could also be explored; a function for it is in the fringe projection file but was not executed per suspiciously subpar results.
 
 ## References
-Geng, Jason. “Structured-Light 3D Surface Imaging: a Tutorial.” *Advances in Optics and Photonics*, vol. 3, no. 2, 2011, p. 128., doi:10.1364/aop.3.000128.
+[1] Zuo, Chao, et al. “Phase Shifting Algorithms for Fringe Projection Profilometry: A Review.” *Optics and Lasers in Engineering*, Elsevier, 15 May 2018, www.osti.gov/biblio/1469785.
 
-Rangarajan, Prasanna, et al. “Pushing the Limits of Digital Imaging Using Structured Illumination.” *2011 International Conference on Computer Vision*, Nov. 2011, doi:10.1109/iccv.2011.6126384.
+[2] Rangarajan, Prasanna, et al. “Pushing the Limits of Digital Imaging Using Structured Illumination.” *2011 International Conference on Computer Vision*, Nov. 2011, doi:10.1109/iccv.2011.6126384.
 
-Zuo, Chao, et al. “Phase Shifting Algorithms for Fringe Projection Profilometry: A Review.” *Optics and Lasers in Engineering*, Elsevier, 15 May 2018, www.osti.gov/biblio/1469785.
+[3] Geng, Jason. “Structured-Light 3D Surface Imaging: a Tutorial.” *Advances in Optics and Photonics*, vol. 3, no. 2, 2011, p. 128., doi:10.1364/aop.3.000128.
