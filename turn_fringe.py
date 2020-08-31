@@ -21,6 +21,9 @@ import t.urn as turn
 
 
 def open_csv(directory):
+    '''
+    Used to open CSV files as an alternative to numpy genfromtxt
+    '''
     results = []
     with open(directory) as csvfile:
         reader = csv.reader(csvfile, quoting=csv.QUOTE_NONNUMERIC) # change contents to floats
@@ -29,6 +32,9 @@ def open_csv(directory):
     return np.asarray(results)
 
 def lookup(table, desired_captured_intensity):#try dci for odd range, evenrange, and none
+    '''
+    Modifies sinusoidal fringe pattern to intensities ideal for the camera
+    '''
     table=table[:(np.where(table[:,1]==np.amax(table[:,1]))[0][0])] #makes end of table where first of max capture is
     desired_captured_intensity=int(desired_captured_intensity)
     if desired_captured_intensity<=np.amax(table[:,1]):
@@ -58,8 +64,11 @@ def lookup(table, desired_captured_intensity):#try dci for odd range, evenrange,
     return int(projected_loc)
 
 
-#Alternative method for pixel-by-pixel calibration; yielded subpar fringes before project deadline
+
 def lookup_pixel(table, desired_captured_intensity, height):
+    '''
+    Alternative method for pixel-by-pixel calibration; yielded subpar fringes before project deadline
+    '''
     table=table[:(np.where(table[:,height+1]==np.amax(table[:,height+1]))[0][0])] #makes end of table where first of max capture is
     desired_captured_intensity=int(desired_captured_intensity)
 
@@ -88,6 +97,9 @@ def lookup_pixel(table, desired_captured_intensity, height):
     return int(projected_loc)
 
 def screen_res():
+    '''
+    Finds width and height of monitor for full screen projections
+    '''
     cmd = ['xrandr']
     cmd2 = ['grep', '*']
     p = subprocess.Popen(cmd, stdout=subprocess.PIPE)
@@ -101,6 +113,9 @@ def screen_res():
     return width, height
 
 def user_input():
+    '''
+    Take user's parameters to display fringes and rotate turntable accordingly
+    '''
     n_steps=int(input('Number of Steps: '))
     divisions = int(input('Number of Fractions of Rotations: '))
     nu00=input('Enter a LOW number of periods along x-axis: ')
@@ -132,6 +147,9 @@ def user_input():
     return n_steps, divisions, nu00, xi00, nu1, xi1
 
 def fringe_create(shift, n_steps, nu0, X, xi0, Y, loca, fringe_dir):
+    '''
+    Makes a mathematically perfect fringe, to be calibrated for the camera after
+    '''
     shift=shift*2*np.pi/n_steps
     img=(np.cos(nu0*X+xi0*Y-shift-0*np.pi/2)/2+0.5)*190+50 #eliminates noise floor and ceiling in cameras
     img=img/255
@@ -142,6 +160,9 @@ def fringe_create(shift, n_steps, nu0, X, xi0, Y, loca, fringe_dir):
     return loca
 
 def fringe_convert(table, loca, fringe_dir):
+    '''
+    The process bridging the mathematically perfect sinusoid to the lookup table
+    '''
     img = mpimg.imread(fringe_dir+'/'+str(loca)+'.png')
     for j in range (img.shape[1]):
         desired_captured_intensity=img[0,j,0]
@@ -152,6 +173,9 @@ def fringe_convert(table, loca, fringe_dir):
     plt.imsave(fringe_dir+'/'+str(loca)+'.png',img,cmap='gray')
 
 def project (fringe_dir, loca):
+    '''
+    Puts calibrated pattern on the projector
+    '''
     image = mpimg.imread(fringe_dir+'/'+str(loca)+'.png')
     matplotlib.rcParams['toolbar'] = 'None'
     imgplot=plt.imshow(image)
@@ -164,6 +188,9 @@ def project (fringe_dir, loca):
     plt.show(block=False)
 
 def camera_setup(picname, exposur, cam_width, cam_height, portno):
+    '''
+    Prepares camera's parameters
+    '''
     key=cv2.waitKey(1000)
     picname=picname+1
     cap = cv2.VideoCapture(portno)
@@ -175,6 +202,9 @@ def camera_setup(picname, exposur, cam_width, cam_height, portno):
     return cap, picname
 
 def photoshoot(cap, pic_dir, picname):
+    '''
+    Takes 5 images at each fringe, minimizing artifacts' influence
+    '''
     k=0
     while(k<=6):
         ret, frame = cap.read()
@@ -184,6 +214,9 @@ def photoshoot(cap, pic_dir, picname):
         k=k+1
 
 def make_folders(data_folder, divisions):
+    '''
+    Make folders, logically enough
+    '''
     for m in range(divisions):
         deg_folder = m * int(360/divisions)
         folder = str(data_folder)+'/'+str(deg_folder)
@@ -192,6 +225,9 @@ def make_folders(data_folder, divisions):
         os.makedirs(folder)
 
 def toggle_low_high(i, nu00, xi00, nu1, xi1, data_folder, deg_folder):
+    '''
+    Changes between high and low frequency values for determining fringe pattern
+    '''
     if i == 1: #Changes between projecting low frequency and high frequency
         nu0=nu1
         xi0=xi1
@@ -219,6 +255,9 @@ def toggle_low_high(i, nu00, xi00, nu1, xi1, data_folder, deg_folder):
     return xi0, nu0, pic_dir, fringe_dir
 
 def projection_folders(i, data_folder, j, divisions):
+    '''
+    Creates folders to store plots and camera's images
+    '''
     if i == 1:
         fringe_dir=data_folder+'/'+str(j*int(360/divisions))+'/high_fringe'
         pic_dir=data_folder+'/'+str(j*int(360/divisions))+'/high_pics'
@@ -228,7 +267,9 @@ def projection_folders(i, data_folder, j, divisions):
     return fringe_dir, pic_dir
 
 def procedure(folder, table, width, height, portno, exposur, cam_width, cam_height):
-
+    '''
+    Encapsulates the whole turn-and-project process
+    '''
     subprocess.call(['v4l2-ctl','-d',str(portno),'--set-ctrl=exposure_auto=1'])
     x=np.linspace(0,1,width)
     y=np.linspace(0,1,height)
@@ -282,11 +323,11 @@ def procedure(folder, table, width, height, portno, exposur, cam_width, cam_heig
                         break
     return nu00, nu1, divisions
 def phaseshift(directory):
-    """
+    '''
     With an N-step fringe projection performed prior, outputting N number of
     webcam images in a directory, this function makes a phase shift map
     accordingly.
-    """
+    '''
     Iarr=np.array([])
 
     length=Image.open(directory+'/1-0.png').size[0] # gets length of exemplary webcam picture
@@ -316,14 +357,24 @@ def phaseshift(directory):
     return phase
 
 def unwrap(low, high, low_freq, high_freq):
+    '''
+    Minimizes high frequency phase map's wrapping artifacts by merging it with
+    the low map
+    '''
     un=high+(2*np.pi)*np.around(((high_freq/low_freq)*low-high)/(2*np.pi))
     return un
 
 def depthmap(to_wall_distance, camera_to_projector_distance, unwrapped, unwrapped_0):
+    '''
+    Disparity between unwrapped map with and without subject on table
+    '''
     u=(int(to_wall_distance)/int(camera_to_projector_distance))*(unwrapped-unwrapped_0)
     return u
 
 def graph(math, title, filepath):
+    '''
+    Clean way to plot the data
+    '''
     #plt.rcParams.update({'font.size': 20})
     plt.imshow(math, cmap='gray', interpolation='none')
     cbar=plt.colorbar()
@@ -332,12 +383,18 @@ def graph(math, title, filepath):
     plt.close()
 
 def xyz(u, title):
+    '''
+    Cpnverts depth map into point cloud depth and xyz format
+    '''
     m,n=u.shape
     R,C=np.mgrid[:m,:n]
     expression=np.column_stack((C.ravel(),R.ravel(), u.ravel()))
     np.savetxt(title, expression[:,:], delimiter=" ")
 
 def intensity_cross_sctn(map, index, width, titl, filepath):
+    '''
+    Cross section at certain row in depth map, to forecast curvature of wall
+    '''
     #plt.rcParams.update({'font.size': 22})
     plt.plot(np.arange(width),map[int(index)])
     plt.title(titl)
@@ -345,6 +402,9 @@ def intensity_cross_sctn(map, index, width, titl, filepath):
     plt.close()
 
 def surface_plot(u, titl, filepath):
+    '''
+    Makes a 3D surface plot; similar to creating a point cloud but in python
+    '''
     #plt.rcParams.update({'font.size': 22})
     fig = plt.figure()
     ax = fig.gca(projection='3d')
@@ -361,6 +421,9 @@ def surface_plot(u, titl, filepath):
     plt.close()
 
 def data_files(nu00, nu1, camera_to_projector_distance, to_wall_distance, divisions, folder):
+    '''
+    Organizes converting camera's images into plots
+    '''
     print('Prepare to input the four pixel corners of the meaningful part of the picture to crop to. Hit q when ready.')
     preview = mpimg.imread(folder+'/subject/0/high_pics/1-0.png')
     imgplot = plt.imshow(preview, cmap='gray')

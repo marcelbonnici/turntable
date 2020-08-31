@@ -15,20 +15,30 @@ from mpl_toolkits.mplot3d import Axes3D
 
 #LINUX
 def enable_manual_exposure(port_number):
-    ''
+    '''
+    Uses video4linux to enale this parameter for Linux users automatically
+    '''
     for cam_number in range(10):
         camera='/dev/video'+str(port_number)
         subprocess.call(['v4l2-ctl','-d',camera,'--set-ctrl=exposure_auto=1'])
 
 def set_camera_params(port_number, width, height):
+    '''
+    Compares what user tries setting camera resolution to versus what it is
+    actually streaming. Helpful for trial-and-error to understand camera's
+    possibilities.
+    '''
     cap = cv2.VideoCapture(port_number)
-    cap.set(3,960)
-    cap.set(4,640)
+    cap.set(3,width)
+    cap.set(4,height)
     ret, pic = cap.read()
     print('Webcam\'s Size: '+str(pic.shape[0])+' tall x '+str(pic.shape[1])+' wide')
     return cap
 
 def projector_res():
+    '''
+    Detect's monitor's resolution to project images to proejctor in full screen
+    '''
     cmd = ['xrandr']
     cmd2 = ['grep', '*']
     p = subprocess.Popen(cmd, stdout=subprocess.PIPE)
@@ -42,6 +52,9 @@ def projector_res():
     return width, height
 
 def project_white_screen(width, height):
+    '''
+    Projects full screen pattern once monitor's width and height are found
+    '''
     image=127*np.ones((int(height), int(width),3))
     image[int(int(height)/2)-10:int(int(height)/2)+10,int(int(width)/2)-10:int(int(width)/2)+10]=0
 
@@ -57,6 +70,10 @@ def project_white_screen(width, height):
     plt.show(block=False)
 
 def exposure_compare(cap, w, h, a, b, c, d, e, f):
+    '''
+    Compare's two different exposures, and allows user to see intensity at last
+    picture. Helpful for choosing a good exposure level for later calibration.
+    '''
     speed=0
     while(True):
         if speed<1:
@@ -96,7 +113,7 @@ if __name__ == "__main__":
     webcam_height=640
 
     #Put webcam port number here
-    port_number=3
+    port_number=0
 
     # Set these two compare exposures, aiming for one below your webcam's noise ceiling. Can be ignored if you are content with your exposure.
     exposure1=50

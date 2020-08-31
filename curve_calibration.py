@@ -16,6 +16,9 @@ import os, os.path
 import shutil
 
 class VideoStreamWidget(object): #SOURCE: https://stackoverflow.com/questions/54933801/how-to-increase-performance-of-opencv-cv2-videocapture0-read
+    '''
+    Calibrates pixel intensities from 1 to 255 for lookup table
+    '''
     def __init__(self, src=0):
         self.cap = cv2.VideoCapture(src)
 
@@ -31,6 +34,9 @@ class VideoStreamWidget(object): #SOURCE: https://stackoverflow.com/questions/54
         self.thread.start()
 
     def open_csv(self):
+        '''
+        Opens a CSV file to start writing to it
+        '''
         results = []
         with open("projection_lookup_table.csv") as csvfile:
             reader = csv.reader(csvfile, quoting=csv.QUOTE_NONNUMERIC)
@@ -39,6 +45,9 @@ class VideoStreamWidget(object): #SOURCE: https://stackoverflow.com/questions/54
         return np.asarray(results)
 
     def width_height(self):
+        '''
+        Finds monitor width and height to project fullscreen images
+        '''
         cmd = ['xrandr']
         cmd2 = ['grep', '*']
         p = subprocess.Popen(cmd, stdout=subprocess.PIPE)
@@ -53,6 +62,9 @@ class VideoStreamWidget(object): #SOURCE: https://stackoverflow.com/questions/54
         return width,height,self.directory
 
     def gradient_calibration(self, z):
+        '''
+        Shifts gradient for certain intensity to be in middle of projection
+        '''
         width, height, _=self.width_height()
 
         img = Image.open('resize_image.png')
@@ -72,6 +84,9 @@ class VideoStreamWidget(object): #SOURCE: https://stackoverflow.com/questions/54
         return image
 
     def image_generate(self, z):
+            '''
+            Turns calibrated image into uint8 file
+            '''
             calibpic=np.full((height,width,3),z)
             calibpic=np.asarray(calibpic,dtype='uint8')
 
@@ -80,12 +95,18 @@ class VideoStreamWidget(object): #SOURCE: https://stackoverflow.com/questions/54
             return calibpic
 
     def project(self, count, total, image):
+        '''
+        Puts gradient pattern on projector
+        '''
         cv2.namedWindow("fringe", cv2.WND_PROP_FULLSCREEN)
         cv2.moveWindow("fringe",width,0)
         cv2.setWindowProperty("fringe",cv2.WND_PROP_FULLSCREEN,cv2.WINDOW_FULLSCREEN)
         cv2.imshow("fringe", image)
 
     def each_capture(self, width, height):
+        '''
+        Carries out entire calibration process
+        '''
         captures=255
         for z in range(0,captures+1):
             image=self.gradient_calibration(z)
@@ -98,6 +119,10 @@ class VideoStreamWidget(object): #SOURCE: https://stackoverflow.com/questions/54
                 break
 
     def photograph(self, z, cap):
+        '''
+        Camera takes 5 pictures at each calibration projection, to minimize
+        artifacts' influence
+        '''
         # Read the next frame from the stream in a different thread
         key=cv2.waitKey(2)
         i=0
@@ -116,6 +141,9 @@ class VideoStreamWidget(object): #SOURCE: https://stackoverflow.com/questions/54
             exit(1)
 
     def sample_image_intensities(self):
+        '''
+        Determines captured intensity to compare to ideal, projected intensity
+        '''
         sample=np.array([])
         for i in range(1, 256):
             intensity_avg=np.array([])
@@ -128,9 +156,9 @@ class VideoStreamWidget(object): #SOURCE: https://stackoverflow.com/questions/54
         return sample
 
     def generate_polyfit_calibration_curve(self):
-        """
+        '''
         Compares a projected gradient image to the capture of the projection on a white wall, making a lookup csv with the best results
-        """
+        '''
 
         width, height, _ = self.width_height()
 
