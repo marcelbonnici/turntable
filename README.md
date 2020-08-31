@@ -116,14 +116,14 @@ The procedure will begin by rotating the turntable, then projecting and capturin
 If one desires to modify their plots, or make plots from photos they already have without triggering the turntable, camera or projector, they can use the `data_files` function independently. The captured fringe images' folder is the only link between both parts of the script.
 
 #### Best Results
-This creamer was illuminated with a LOW frequency of **0.25** and a HIGH frequency of **5**
+This creamer was illuminated with a **LOW** frequency of **0.25** and a **HIGH** frequency of **5**
 ![Depth Map](README-images/best_results.gif)
 ## Future Possibilities
 A factor limiting the quality of the point clouds was finding good frequencies for an optimal depth map. A disparity map comparing two parallel walls, separated by 138mm, and projected with the same frequencies yielded nearly perfect flat walls, besides a few sample points only visible by squinting at the below figures.  While this looks promising, a disparity map comparing low and high frequency images gave results leaving something to be desired.
 
 ![Fringe Frequencies](README-images/low_frequencies.png)
 
-The next goal would be fusing images from different views.
+*The next goal would be fusing images from different views.*
 
 Thus, under lenient standards of accuracy, the point clouds from different positions are ready to be transformed into one cloud detailed from every side. Pixel-by-pixel calibration could also be explored; a function for it is in the fringe projection file but was not executed per suspiciously subpar results.
 
