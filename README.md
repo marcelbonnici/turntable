@@ -6,7 +6,8 @@ This open source project combines mechatronics and computer vision to find the d
 As a mechatronics enthusiast, computer vision is a necessary skill to hone. When advised to make this project open source, it was logical to build the turntable from cherished LEGO® bricks to make it affordable, too.
 
 ## Video Demonstration
----
+[Click Here to Watch](https://youtu.be/pxwZWfczoWY)
+
 [![Turntable Fringe Projection](README-images/low_phase_map.png)](https://youtu.be/pxwZWfczoWY)
 
 ---
